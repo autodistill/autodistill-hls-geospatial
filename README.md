@@ -17,7 +17,7 @@ This repository contains the code supporting the HLS Geospatial base model for u
 
 The following models are supported:
 
-- Prithvi-100M-sen1floods11
+- [Prithvi-100M-sen1floods11](https://huggingface.co/ibm-nasa-geospatial/Prithvi-100M-sen1floods11)
 
 This module accepts `tiff` files as input and returns segmentation masks.
 
