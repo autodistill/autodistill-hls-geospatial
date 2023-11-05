@@ -1,5 +1,3 @@
-**⚠️ This is an example README for use in creating a Base Model. You will need to adjust this document for the model you are using.**
-
 <div align="center">
   <p>
     <a align="center" href="" target="_blank">
@@ -15,7 +13,13 @@
 
 This repository contains the code supporting the HLS Geospatial base model for use with [Autodistill](https://github.com/autodistill/autodistill).
 
-[HLS Geospatial](https://github.com/openai/HLS Geospatial), developed by OpenAI, is a computer vision model trained using pairs of images and text. You can use HLS Geospatial with autodistill for image classification.
+[Harmonized Landsat and Sentinel-2 (HLS) Prithvi](https://github.com/NASA-IMPACT/hls-foundation-os) is a collection of foundation models for geospatial analysis, developed by NASA and IBM. You can use Autodistill to automatically label images for use in training segmentation models.
+
+The following models are supported:
+
+- Prithvi-100M-sen1floods11
+
+This module accepts `tiff` files as input and returns segmentation masks.
 
 Read the full [Autodistill documentation](https://autodistill.github.io/autodistill/).
 
