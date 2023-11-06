@@ -52,8 +52,10 @@ def stretch_rgb(rgb):
     return img_rescale
 
 
-# replace with the file you want to use
-with rasterio.open("USA_430764_S2Hand.tif") as src:
+#replace with the name of the file you want to label
+FILE_NAME = "USA_430764_S2Hand.tif"
+
+with rasterio.open(FILE_NAME) as src:
     image = src.read()
 
     mask = image
@@ -65,7 +67,7 @@ with rasterio.open("USA_430764_S2Hand.tif") as src:
     base_model = HLSGeospatial()
 
     # replace with the file you want to use
-    detections = base_model.predict("USA_430764_S2Hand.tif")
+    detections = base_model.predict(FILE_NAME)
 
     mask_annotator = sv.MaskAnnotator()
 
