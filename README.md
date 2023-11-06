@@ -29,7 +29,6 @@ Read the [HLS Geospatial Autodistill documentation](https://autodistill.github.i
 
 To use HLS Geospatial with autodistill, you need to install the following dependency:
 
-
 ```bash
 pip3 install autodistill-hls-geospatial
 ```
@@ -44,15 +43,44 @@ from autodistill_hls_geospatial import HLSGeospatial
 # where caption is the prompt sent to the base model, and class is the label that will
 # be saved for that caption in the generated annotations
 # then, load the model
-base_model = HLS Geospatial(
-    ontology=CaptionOntology(
-        {
-            "person": "person",
-            "a forklift": "forklift"
-        }
+import numpy as np
+import rasterio
+from skimage import exposure
+import supervision as sv
+
+from autodistill_hls_geospatial import HLSGeospatial
+
+def stretch_rgb(rgb):
+    ls_pct = 1
+    pLow, pHigh = np.percentile(rgb[~np.isnan(rgb)], (ls_pct, 100 - ls_pct))
+    img_rescale = exposure.rescale_intensity(rgb, in_range=(pLow, pHigh))
+
+    return img_rescale
+
+
+# replace with the file you want to use
+with rasterio.open("USA_430764_S2Hand.tif") as src:
+    image = src.read()
+
+    mask = image
+
+    rgb = stretch_rgb(
+        (mask[[3, 2, 1], :, :].transpose((1, 2, 0)) / 10000 * 255).astype(np.uint8)
     )
-)
-base_model.label("./context_images", extension=".jpeg")
+
+    base_model = HLSGeospatial()
+
+    # replace with the file you want to use
+    detections = base_model.predict("USA_430764_S2Hand.tif")
+
+    mask_annotator = sv.MaskAnnotator()
+
+    annotated_image = mask_annotator.annotate(scene=rgb, detections=detections)
+
+    sv.plot_image(annotated_image, size=(10, 10))
+
+# label a folder of .tif files
+base_model.label("./context_images", extension=".tif")
 ```
 
 
