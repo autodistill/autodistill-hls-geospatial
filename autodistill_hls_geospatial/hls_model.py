@@ -2,17 +2,15 @@
 # Autodistill code from Roboflow
 
 import os
+import subprocess
 from dataclasses import dataclass
 
+import numpy as np
+import rasterio
 import supervision as sv
 import torch
 from autodistill.detection import DetectionBaseModel
 from huggingface_hub import hf_hub_download
-import subprocess
-
-import numpy as np
-import rasterio
-import torch
 from mmcv import Config
 from mmcv.parallel import collate, scatter
 from mmseg.apis import init_segmentor
@@ -191,7 +189,7 @@ class HLSGeospatial(DetectionBaseModel):
         # adding this until we build support for the other models
         if model_name != "Prithvi-100M-sen1floods11":
             raise ValueError(f"Model name {model_name} not supported")
-        
+
         if model_name == "Prithvi-100M-sen1floods11":
             config_path = hf_hub_download(
                 repo_id="ibm-nasa-geospatial/Prithvi-100M-sen1floods11",
