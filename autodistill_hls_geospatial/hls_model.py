@@ -2,6 +2,10 @@
 # Autodistill code from Roboflow
 
 import os
+
+AUTODISTILL_DIR = os.path.expanduser("~/.cache/autodistill")
+ORIGINAL_DIR = os.getcwd()
+
 import subprocess
 from dataclasses import dataclass
 
@@ -13,8 +17,25 @@ from autodistill.detection import DetectionBaseModel
 from huggingface_hub import hf_hub_download
 from mmcv import Config
 from mmcv.parallel import collate, scatter
-from mmseg.apis import init_segmentor
-from mmseg.datasets.pipelines import Compose, LoadImageFromFile
+
+try:
+    from mmseg.apis import init_segmentor
+    from mmseg.datasets.pipelines import Compose, LoadImageFromFile
+except:
+    # install mmsegmentation @ https://github.com/open-mmlab/mmsegmentation.git@186572a3ce64ac9b6b37e66d58c76515000c3280#egg=mmsegmentation
+    os.chdir(AUTODISTILL_DIR)
+    subprocess.run(
+        [
+            "git",
+            "clone",
+            "https://github.com/open-mmlab/mmsegmentation.git",
+        ]
+    )
+    os.chdir(os.path.join(AUTODISTILL_DIR, "mmsegmentation"))
+    subprocess.run(["git", "checkout", "186572a3ce64ac9b6b37e66d58c76515000c3280"])
+    subprocess.run(["pip", "install", "-e", "."])
+    os.chdir(ORIGINAL_DIR)
+
 from skimage import exposure
 
 ORIGINAL_DIR = os.getcwd()
@@ -23,8 +44,6 @@ if not os.environ.get("HF_TOKEN"):
     raise ValueError(
         "Please set your Hugging Face token as an environment variable called 'HF_TOKEN'"
     )
-
-AUTODISTILL_DIR = os.path.expanduser("~/.cache/autodistill")
 
 # download git clone https://github.com/NASA-IMPACT/hls-foundation-os.git
 if not os.path.exists(os.path.join(AUTODISTILL_DIR, "hls-foundation-os")):
@@ -201,6 +220,7 @@ class HLSGeospatial(DetectionBaseModel):
                 filename="sen1floods11_Prithvi_100M.pth",
                 token=os.environ.get("HF_TOKEN"),
             )
+
         elif model_name == "Prithvi-100M-burn-scar":
             config_path = hf_hub_download(
                 repo_id="ibm-nasa-geospatial/Prithvi-100M-burn-scar",

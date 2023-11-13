@@ -23,8 +23,7 @@ setuptools.setup(
         "autodistill",
         "supervision",
         "rasterio",
-        "mmcv-full==1.5.0",
-        "mmsegmentation@git+https://github.com/open-mmlab/mmsegmentation.git@186572a3ce64ac9b6b37e66d58c76515000c3280"
+        "mmcv-full==1.5.0"
     ],
     packages=find_packages(exclude=("tests",)),
     extras_require={
