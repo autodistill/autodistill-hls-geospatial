@@ -42,8 +42,6 @@ import rasterio
 from skimage import exposure
 import supervision as sv
 
-from autodistill_hls_geospatial import HLSGeospatial
-
 def stretch_rgb(rgb):
     ls_pct = 1
     pLow, pHigh = np.percentile(rgb[~np.isnan(rgb)], (ls_pct, 100 - ls_pct))
